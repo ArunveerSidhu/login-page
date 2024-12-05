@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login Page</title>
+    <link href="index.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="form">
+      <form action="/get-form-data" method="post" id="loginForm" onsubmit="return validateForm(event)">
+        <input type="text" name="username" placeholder="Enter username" class="input-text" required>
+        <input type="email" name="email" placeholder="Enter email" class="input-text" required>
+        <input type="password" name="password" placeholder="Enter password" class="input-text" 
+               required minlength="8" 
+               title="Must contain at least 8 characters, one uppercase letter, and one special character">
+        <button type="submit">Submit</button>
+      </form> 
+    </div>
+
+    <script>
+      function validateForm(event) {
+        event.preventDefault();
+        
+        const email = document.querySelector('input[name="email"]').value;
+        const password = document.querySelector('input[name="password"]').value;
+        
+        // Email validation using regex
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          alert('Please enter a valid email address');
+          return false;
+        }
+        
+        // Password validation
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+        const hasMinLength = password.length >= 8;
+        
+        if (!hasMinLength || !hasUpperCase || !hasSpecialChar) {
+          alert('Password must contain:\n- At least 8 characters\n- At least 1 uppercase letter\n- At least 1 special character');
+          return false;
+        }
+        
+        // If all validations pass, submit the form
+        document.getElementById('loginForm').submit();
+        return true;
+      }
+      
+      // Real-time password validation feedback
+      const passwordInput = document.querySelector('input[name="password"]');
+      passwordInput.addEventListener('input', function() {
+        const password = this.value;
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+        const hasMinLength = password.length >= 8;
+        
+        this.style.borderColor = (hasMinLength && hasUpperCase && hasSpecialChar) ? '#4a90e2' : '#ff3366';
+      });
+      
+      // Real-time email validation feedback
+      const emailInput = document.querySelector('input[name="email"]');
+      emailInput.addEventListener('input', function() {
+        const email = this.value;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        this.style.borderColor = emailRegex.test(email) ? '#4a90e2' : '#ff3366';
+      });
+    </script>
+  </body>
+</html>
